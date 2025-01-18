@@ -9,7 +9,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class HomeViewModel(private val getProductsListUseCase: GetProductsListUseCase) : ViewModel() {
+class HomeViewModel constructor(
+    private val getProductsListUseCase: GetProductsListUseCase
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow<HomeScreenUIEvents>(HomeScreenUIEvents.Loading)
     val uiState = _uiState.asStateFlow()
@@ -22,7 +24,7 @@ class HomeViewModel(private val getProductsListUseCase: GetProductsListUseCase) 
         viewModelScope.launch {
             _uiState.value = HomeScreenUIEvents.Loading
             val featured = getProductsList("electronics")
-            val popular = getProductsList("jewelry")
+            val popular = getProductsList("jewelery")
             _uiState.value = if (featured.isNotEmpty() && popular.isNotEmpty()) {
                 HomeScreenUIEvents.Success(featured, popular)
             } else {

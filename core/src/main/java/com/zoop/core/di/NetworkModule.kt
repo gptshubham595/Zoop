@@ -1,5 +1,7 @@
 package com.zoop.core.di
 
+import coil3.network.NetworkClient
+import coil3.network.okhttp.asNetworkClient
 import com.zoop.core.network.NetworkServiceImpl
 import com.zoop.domain.network.NetworkService
 import io.ktor.client.HttpClient
@@ -10,6 +12,7 @@ import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import okhttp3.OkHttpClient
 import org.koin.dsl.module
 
 val networkModule = module {
@@ -34,5 +37,16 @@ val networkModule = module {
     }
     single<NetworkService> {
         NetworkServiceImpl(get())
+    }
+
+    val imageLoaderModule = module {
+        single {
+            OkHttpClient.Builder()
+                .build()
+        }
+
+        single<NetworkClient> {
+            get<OkHttpClient>().asNetworkClient()
+        }
     }
 }
