@@ -1,7 +1,6 @@
 package com.zoop.presentation.ui.feature.home
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -42,10 +41,9 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel = koinView
                 }
 
                 is HomeScreenUIEvents.Success -> {
-                    val data = result
                     HomeContent(
-                        featured = data.featured,
-                        popular = data.popularProducts
+                        featured = result.featured,
+                        popular = result.popularProducts
                     )
                 }
 

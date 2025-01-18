@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.ImageLoader
@@ -63,14 +64,17 @@ fun ProductItem(product: Product, imageLoader: ImageLoader = koinInject()) {
                 text = product.title,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(horizontal = 8.dp),
-                fontWeight = FontWeight.SemiBold
+                fontWeight = FontWeight.SemiBold,
+                overflow = TextOverflow.Ellipsis,
 
             )
             Spacer(modifier = Modifier.size(4.dp))
             Text(
                 text = "$${product.price}",
                 style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(horizontal = 8.dp)
+                modifier = Modifier.padding(horizontal = 8.dp),
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.SemiBold
             )
         }
     }
@@ -89,11 +93,13 @@ fun SearchBar(value: String, onTextChange: (String) -> Unit) {
                 modifier = Modifier.size(24.dp)
             )
         },
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
         shape = RoundedCornerShape(32.dp),
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent
+            unfocusedIndicatorColor = Color.Transparent,
+            focusedContainerColor = Color.LightGray.copy(alpha = 0.3f),
+            unfocusedContainerColor = Color.LightGray.copy(alpha = 0.3f),
         ),
         placeholder = {
             Text(
