@@ -15,8 +15,17 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
+import com.zoop.domain.models.product.ProductModel
+import com.zoop.presentation.models.UiProductModel
+import com.zoop.presentation.navigation.CartScreen
+import com.zoop.presentation.navigation.HomeScreen
+import com.zoop.presentation.navigation.ProductDetailScreen
+import com.zoop.presentation.navigation.ProfileScreen
+import com.zoop.presentation.navigation.productNavType
 import com.zoop.presentation.ui.feature.home.HomeScreen
 import com.zoop.presentation.ui.theme.ZoopTheme
+import kotlin.reflect.typeOf
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,11 +45,11 @@ class MainActivity : ComponentActivity() {
                             .fillMaxSize()
                             .padding(it)
                     ) {
-                        NavHost(navController = navController, startDestination = "home") {
-                            composable("home") {
+                        NavHost(navController = navController, startDestination = HomeScreen) {
+                            composable<HomeScreen> {
                                 HomeScreen(navController)
                             }
-                            composable("cart") {
+                            composable<CartScreen> {
                                 Box(
                                     modifier = Modifier.fillMaxSize(),
                                     contentAlignment = Alignment.Center
@@ -48,12 +57,25 @@ class MainActivity : ComponentActivity() {
                                     Text(text = "Cart")
                                 }
                             }
-                            composable("profile") {
+                            composable<ProfileScreen> {
                                 Box(
                                     modifier = Modifier.fillMaxSize(),
                                     contentAlignment = Alignment.Center
                                 ) {
                                     Text(text = "Profile")
+                                }
+                            }
+                            composable<ProductDetailScreen>(
+                                typeMap = mapOf(
+                                    typeOf<UiProductModel>() to productNavType
+                                )
+                            ) {
+                                val productRoute = it.toRoute<ProductDetailScreen>()
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(text = "Product Detail: ${productRoute.product.title}")
                                 }
                             }
                         }

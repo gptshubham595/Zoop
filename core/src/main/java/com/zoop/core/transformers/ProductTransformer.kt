@@ -3,11 +3,11 @@ package com.zoop.core.transformers
 import com.zoop.data.models.product.ProductDTO
 import com.zoop.data.models.product.ProductListResponse
 import com.zoop.data.models.product.RatingDTO
-import com.zoop.domain.models.product.Product
+import com.zoop.domain.models.product.ProductModel
 import com.zoop.domain.models.product.ProductList
 import com.zoop.domain.models.product.Rating
 
-fun ProductDTO.toDomain() = Product(
+fun ProductDTO.toDomain() = ProductModel(
 //    id = id,
 //    title = title,
 //    price = price,
