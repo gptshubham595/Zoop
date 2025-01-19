@@ -24,8 +24,9 @@ fun BottomNavBar(navController: NavController) {
         )
 
         items.forEach { item ->
+            val isSelected = currentRoute?.substringBefore('?') == item.route::class.qualifiedName
             NavigationBarItem(
-                selected = currentRoute == item.route,
+                selected = isSelected,
                 onClick = {
                     navController.navigate(item.route) {
                         navController.graph.startDestinationRoute?.let { startRoute ->
@@ -43,7 +44,7 @@ fun BottomNavBar(navController: NavController) {
                         painter = painterResource(id = item.icon),
                         contentDescription = item.title,
                         colorFilter = ColorFilter.tint(
-                            if (currentRoute == item.route)
+                            if (isSelected)
                                 MaterialTheme.colorScheme.primary
                             else
                                 MaterialTheme.colorScheme.secondary

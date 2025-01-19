@@ -2,6 +2,7 @@ package com.zoop.presentation.ui.feature.product
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,19 +27,23 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.ImageLoader
 import coil3.compose.AsyncImage
-import com.zoop.domain.models.product.Product
+import com.zoop.domain.models.product.ProductModel
 import com.zoop.presentation.R
 
 
 @Composable
 fun ProductItem(
-    product: Product,
-    imageLoader: ImageLoader
+    product: ProductModel,
+    imageLoader: ImageLoader,
+    onClick: (ProductModel) -> Unit
 ) {
     Card(
         modifier = Modifier
             .padding(horizontal = 8.dp)
-            .size(width = 126.dp, height = 144.dp),
+            .size(width = 126.dp, height = 144.dp)
+            .clickable {
+                onClick(product)
+            },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.LightGray.copy(alpha = 0.3f)

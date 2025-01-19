@@ -1,6 +1,6 @@
 package com.zoop.domain.models.product
 
-data class Product(
+data class ProductModel(
 //    val id: Int,
 //    val title: String,
 //    val price: Double,

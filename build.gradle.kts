@@ -2,6 +2,7 @@
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
+//    id("org.jetbrains.kotlin.plugin.parcelize") version "2.1.20-Beta1" apply false
     alias(libs.plugins.kotlin.compose) apply false
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.kotlinx.serialization) apply false

@@ -30,7 +30,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil3.ImageLoader
 import com.zoop.domain.models.category.CategoriesModel
-import com.zoop.domain.models.product.Product
+import com.zoop.domain.models.product.ProductModel
+import com.zoop.presentation.models.UiProductModel.Companion.fromProductModel
+import com.zoop.presentation.navigation.ProductDetailScreen
 import com.zoop.presentation.ui.feature.product.ProductRow
 import com.zoop.presentation.ui.feature.product.SearchBar
 import com.zoop.presentation.ui.feature.profile.ProfileHeader
@@ -41,14 +43,14 @@ import org.koin.compose.koinInject
 fun HomeScreen(
     navController: NavController,
     viewModel: HomeViewModel = koinViewModel(),
-    imageLoader: ImageLoader = koinInject()
+    imageLoader: ImageLoader = koinInject(),
 ) {
 
     val loading = rememberSaveable { mutableStateOf(false) }
     val error = rememberSaveable { mutableStateOf<String?>(null) }
 
-    val featureList = rememberSaveable { mutableStateOf<List<Product>>(emptyList()) }
-    val productList = rememberSaveable { mutableStateOf<List<Product>>(emptyList()) }
+    val featureList = rememberSaveable { mutableStateOf<List<ProductModel>>(emptyList()) }
+    val productList = rememberSaveable { mutableStateOf<List<ProductModel>>(emptyList()) }
 //    val categories = rememberSaveable { mutableStateOf<List<String>>(emptyList()) }
     val categories = rememberSaveable { mutableStateOf<List<CategoriesModel>>(emptyList()) }
 
@@ -84,102 +86,111 @@ fun HomeScreen(
         categories = categories.value,
         isLoading = loading.value,
         error = error.value,
-        imageLoader
+        imageLoader,
+        onClick = { product ->
+            navController.navigate(ProductDetailScreen(product.fromProductModel()))
+        }
     )
 }
 
 
 @Composable
 fun HomeContent(
-    featured: List<Product>,
-    popular: List<Product>,
+    featured: List<ProductModel>,
+    popular: List<ProductModel>,
     categories: /*List<String>*/ List<CategoriesModel>,
     isLoading: Boolean = false,
     error: String? = null,
-    imageLoader: ImageLoader
+    imageLoader: ImageLoader,
+    onClick: (ProductModel) -> Unit
 ) {
-    when {
-        isLoading -> {
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(50.dp)
-                )
-                Text(
-                    text = "Loading...",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-            }
-        }
+    Column {
+        ProfileHeader()
+        Spacer(modifier = Modifier.size(6.dp))
+        SearchBar(value = "", onTextChange = {})
+        Spacer(modifier = Modifier.size(16.dp))
 
-        error != null -> {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = error,
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-        }
-
-        else -> {
-            LazyColumn {
-                item {
-                    ProfileHeader()
-                    Spacer(modifier = Modifier.size(6.dp))
-                    SearchBar(value = "", onTextChange = {})
-                    Spacer(modifier = Modifier.size(16.dp))
+        when {
+            isLoading -> {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(50.dp)
+                    )
+                    Text(
+                        text = "Loading...",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
                 }
-                item {
-                    if (categories.isNotEmpty()) {
-                        LazyRow {
-                            items(categories, key = { it.id }) { category ->
-                                val isVisible = rememberSaveable { mutableStateOf(false) }
-                                LaunchedEffect(key1 = Unit) {
-                                    isVisible.value = true
-                                }
-                                AnimatedVisibility(
-                                    visible = isVisible.value,
-                                    enter = fadeIn() + expandVertically()
-                                ) {
-                                    Text(
-                                        text = category.title.replaceFirstChar { it.uppercase() },
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        modifier = Modifier
-                                            .padding(horizontal = 8.dp)
-                                            .clip(RoundedCornerShape(8.dp))
-                                            .background(MaterialTheme.colorScheme.primary)
-                                            .padding(8.dp),
-                                        color = MaterialTheme.colorScheme.onPrimary
-                                    )
+            }
+
+            error != null -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = error,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
+
+            else -> {
+                LazyColumn {
+                    item {
+                        if (categories.isNotEmpty()) {
+                            LazyRow {
+                                items(categories, key = { it.id }) { category ->
+                                    val isVisible = rememberSaveable { mutableStateOf(false) }
+                                    LaunchedEffect(key1 = Unit) {
+                                        isVisible.value = true
+                                    }
+                                    AnimatedVisibility(
+                                        visible = isVisible.value,
+                                        enter = fadeIn() + expandVertically()
+                                    ) {
+                                        Text(
+                                            text = category.title.replaceFirstChar { it.uppercase() },
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            modifier = Modifier
+                                                .padding(horizontal = 8.dp)
+                                                .clip(RoundedCornerShape(8.dp))
+                                                .background(MaterialTheme.colorScheme.primary)
+                                                .padding(8.dp),
+                                            color = MaterialTheme.colorScheme.onPrimary
+                                        )
+                                    }
                                 }
                             }
+                            Spacer(modifier = Modifier.size(16.dp))
                         }
-                        Spacer(modifier = Modifier.size(16.dp))
-                    }
-                    if (featured.isNotEmpty()) {
-                        ProductRow(products = featured, "Featured", imageLoader)
-                        Spacer(modifier = Modifier.size(16.dp))
-                    }
-                    if (popular.isNotEmpty()) {
-                        ProductRow(
-                            products = popular,
-                            "Popular Products",
-                            imageLoader
-                        )
+                        if (featured.isNotEmpty()) {
+                            ProductRow(
+                                products = featured,
+                                "Featured",
+                                imageLoader,
+                                onClick
+                            )
+                            Spacer(modifier = Modifier.size(16.dp))
+                        }
+                        if (popular.isNotEmpty()) {
+                            ProductRow(
+                                products = popular,
+                                "Most Popular",
+                                imageLoader,
+                                onClick
+                            )
+                        }
                     }
                 }
             }
         }
-
     }
 }
-
 
 

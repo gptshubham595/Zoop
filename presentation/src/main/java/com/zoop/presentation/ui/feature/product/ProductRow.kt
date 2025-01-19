@@ -1,6 +1,5 @@
 package com.zoop.presentation.ui.feature.product
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.layout.Box
@@ -22,14 +21,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.ImageLoader
-import com.zoop.domain.models.product.Product
+import com.zoop.domain.models.product.ProductModel
 
 
 @Composable
 fun ProductRow(
-    products: List<Product>,
+    products: List<ProductModel>,
     title: String,
-    imageLoader: ImageLoader
+    imageLoader: ImageLoader,
+    onClick: (ProductModel) -> Unit
 ) {
     Column {
         Box(
@@ -63,7 +63,7 @@ fun ProductRow(
                     visible = isVisible.value,
                     enter = fadeIn() + expandVertically()
                 ) {
-                    ProductItem(product = it, imageLoader)
+                    ProductItem(product = it, imageLoader, onClick)
                 }
             }
         }
