@@ -1,21 +1,34 @@
 package com.zoop.core.transformers
 
-import com.zoop.data.models.ProductDTO
-import com.zoop.data.models.RatingDTO
-import com.zoop.domain.models.Product
-import com.zoop.domain.models.Rating
+import com.zoop.data.models.product.ProductDTO
+import com.zoop.data.models.product.ProductListResponse
+import com.zoop.data.models.product.RatingDTO
+import com.zoop.domain.models.product.Product
+import com.zoop.domain.models.product.ProductList
+import com.zoop.domain.models.product.Rating
 
 fun ProductDTO.toDomain() = Product(
-    id = id,
-    title = title,
-    price = price,
+//    id = id,
+//    title = title,
+//    price = price,
+//    description = description,
+//    category = category,
+//    image = image,
+//    rating = rating.toDomain()
+    categoryId = categoryId,
     description = description,
-    category = category,
+    id = id,
     image = image,
-    rating = rating.toDomain()
+    price = price,
+    title = title,
 )
 
 fun RatingDTO.toDomain() = Rating(
     rate = rate,
     count = count
+)
+
+fun ProductListResponse.toDomain() = ProductList(
+    data = data.map { it.toDomain() },
+    msg = msg
 )

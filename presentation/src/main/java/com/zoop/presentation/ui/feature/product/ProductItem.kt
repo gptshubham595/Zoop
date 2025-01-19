@@ -1,6 +1,7 @@
 package com.zoop.presentation.ui.feature.product
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,28 +20,29 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.ImageLoader
 import coil3.compose.AsyncImage
-import com.zoop.domain.models.Product
-import com.zoop.domain.models.Rating
+import com.zoop.domain.models.product.Product
 import com.zoop.presentation.R
-import org.koin.compose.koinInject
 
 
 @Composable
-fun ProductItem(product: Product, imageLoader: ImageLoader = koinInject()) {
+fun ProductItem(
+    product: Product,
+    imageLoader: ImageLoader
+) {
     Card(
         modifier = Modifier
             .padding(horizontal = 8.dp)
             .size(width = 126.dp, height = 144.dp),
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.LightGray.copy(alpha = 0.3f))
+        colors = CardDefaults.cardColors(
+            containerColor = Color.LightGray.copy(alpha = 0.3f)
+        )
     ) {
         Column(
             modifier = Modifier.fillMaxSize()
@@ -51,7 +53,8 @@ fun ProductItem(product: Product, imageLoader: ImageLoader = koinInject()) {
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(96.dp),
+                    .height(96.dp)
+                    .background(Color.White),
                 onSuccess = {
                     Log.d("ProductItem", "Image loaded successfully")
                 },
@@ -59,16 +62,16 @@ fun ProductItem(product: Product, imageLoader: ImageLoader = koinInject()) {
                     Log.e("ProductItem", "Error loading image")
                 }
             )
-            Spacer(modifier = Modifier.size(8.dp))
+            Spacer(modifier = Modifier.size(4.dp))
             Text(
                 text = product.title,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(horizontal = 8.dp),
                 fontWeight = FontWeight.SemiBold,
                 overflow = TextOverflow.Ellipsis,
+                maxLines = 1
 
             )
-            Spacer(modifier = Modifier.size(4.dp))
             Text(
                 text = "$${product.price}",
                 style = MaterialTheme.typography.bodySmall,
@@ -93,7 +96,9 @@ fun SearchBar(value: String, onTextChange: (String) -> Unit) {
                 modifier = Modifier.size(24.dp)
             )
         },
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
         shape = RoundedCornerShape(32.dp),
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = Color.Transparent,
@@ -111,17 +116,17 @@ fun SearchBar(value: String, onTextChange: (String) -> Unit) {
     )
 
 }
-
-@Preview
-@Composable
-fun ProductItemScreenPreview() {
-    ProductItem(
-        Product(
-            1, "Product 1",
-            1.0, "Description 1",
-            "", "",
-            Rating(1.0, 1)
-        ),
-        imageLoader = ImageLoader(context = LocalContext.current)
-    )
-}
+//
+//@Preview
+//@Composable
+//fun ProductItemScreenPreview() {
+//    ProductItem(
+//        Product(
+//            1, "Product 1",
+//            1.0, "Description 1",
+//            "", "",
+//            Rating(1.0, 1)
+//        ),
+//        imageLoader = ImageLoader(context = LocalContext.current)
+//    )
+//}
