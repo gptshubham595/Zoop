@@ -1,5 +1,6 @@
 package com.zoop.core.di
 
+import android.util.Log
 import coil3.network.NetworkClient
 import coil3.network.okhttp.asNetworkClient
 import com.zoop.core.network.NetworkServiceImpl
@@ -28,7 +29,7 @@ val networkModule = module {
             install(Logging) {
                 logger = object : Logger {
                     override fun log(message: String) {
-                        println("Ktor Log: $message")
+                        Log.d("KtorLog","Log: $message")
                     }
                 }
                 level = LogLevel.ALL
@@ -39,14 +40,12 @@ val networkModule = module {
         NetworkServiceImpl(get())
     }
 
-    val imageLoaderModule = module {
-        single {
-            OkHttpClient.Builder()
-                .build()
-        }
+    single {
+        OkHttpClient.Builder()
+            .build()
+    }
 
-        single<NetworkClient> {
-            get<OkHttpClient>().asNetworkClient()
-        }
+    single<NetworkClient> {
+        get<OkHttpClient>().asNetworkClient()
     }
 }

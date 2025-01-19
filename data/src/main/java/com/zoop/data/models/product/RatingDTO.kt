@@ -1,4 +1,4 @@
-package com.zoop.data.models
+package com.zoop.data.models.product
 
 import kotlinx.serialization.Serializable
 

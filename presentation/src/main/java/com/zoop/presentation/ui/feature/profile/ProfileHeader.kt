@@ -32,7 +32,7 @@ fun ProfileHeader() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                horizontal = 8.dp,
+                horizontal = 16.dp,
                 vertical = 16.dp
             )
     ) {
@@ -43,7 +43,7 @@ fun ProfileHeader() {
             Image(
                 painter = painterResource(id = R.drawable.ic_account),
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(Color.LightGray),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary),
                 modifier = Modifier
                     .padding(8.dp)
                     .size(48.dp)
@@ -63,11 +63,11 @@ fun ProfileHeader() {
             }
         }
         Image(
-            painter = painterResource(id = R.drawable.ic_notification),
+            painter = painterResource(id = R.drawable.ic_notification_bell),
             contentDescription = null,
-            colorFilter = ColorFilter.tint(Color.LightGray),
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary),
             modifier = Modifier
-                .size(20.dp)
+                .size(48.dp)
                 .align(Alignment.CenterEnd)
                 .clip(CircleShape)
                 .background(Color.LightGray.copy(alpha = 0.3f)),

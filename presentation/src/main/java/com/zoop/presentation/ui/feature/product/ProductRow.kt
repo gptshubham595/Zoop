@@ -1,5 +1,8 @@
 package com.zoop.presentation.ui.feature.product
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,17 +14,23 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.zoop.domain.models.Product
-import com.zoop.domain.models.Rating
+import coil3.ImageLoader
+import com.zoop.domain.models.product.Product
 
 
 @Composable
-fun ProductRow(products: List<Product>, title: String) {
+fun ProductRow(
+    products: List<Product>,
+    title: String,
+    imageLoader: ImageLoader
+) {
     Column {
         Box(
             modifier = Modifier
@@ -45,30 +54,40 @@ fun ProductRow(products: List<Product>, title: String) {
         }
         Spacer(modifier = Modifier.size(8.dp))
         LazyRow {
-            items(products) {
-                ProductItem(product = it)
+            items(products, key = { it.id }) {
+                val isVisible = rememberSaveable { mutableStateOf(false) }
+                LaunchedEffect(key1 = Unit) {
+                    isVisible.value = true
+                }
+                androidx.compose.animation.AnimatedVisibility(
+                    visible = isVisible.value,
+                    enter = fadeIn() + expandVertically()
+                ) {
+                    ProductItem(product = it, imageLoader)
+                }
             }
         }
     }
 }
 
-@Preview
-@Composable
-fun HomeProductRowPreview() {
-    ProductRow(
-        listOf(
-            Product(
-                1,
-                "Product 1",
-                1.0,
-                "Description 1",
-                "",
-                "",
-                Rating(0.0, 0)
-            )
-        ),
-        "feature"
-    )
-}
-
+//@Preview
+//@Composable
+//fun HomeProductRowPreview() {
+//    ProductRow(
+//        listOf(
+//            Product(
+//                1,
+//                "Product 1",
+//                1.0,
+//                "Description 1",
+//                "",
+//                "",
+//                Rating(0.0, 0)
+//            )
+//        ),
+//        "feature",
+//        imageLoader = ImageLoader(context = LocalContext.current)
+//    )
+//}
+//
 

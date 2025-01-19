@@ -3,7 +3,7 @@
 
     <application>
         <activity
-            android:name="com.zoop.presentation.MainActivity"
+            android:name="com.zoop.presentation.ui.feature.main.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.ZoopTheme">
             <intent-filter>
